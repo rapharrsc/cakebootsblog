@@ -15,8 +15,8 @@
 		</div>
 
 		<?php
-		echo $this->Form->button("Salvar", array("id" => "save", "class" => "btn btn-success", "type" => "submit"));
-		echo $this->Form->end();
+		//echo $this->Form->button("Salvar", array("id" => "save", "class" => "btn btn-success", "type" => "submit"));
+		echo $this->Form->end('Salvar');
 		?> 
 
 	</div>

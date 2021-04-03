@@ -32,5 +32,33 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller 
 {
-	public $isonline = false;
+	public $loggedIn = false;
+
+	public $components = array(
+		'Flash',
+		'Auth' => array(
+			'loginRedirect' => array('controller' => 'posts', 'action' => 'index'),
+			'logoutRedirect' => array(
+				'controller' => 'posts',
+				'action' => 'index'
+			),
+        'authorize' => array('Controller') // Added this line
+    )
+	);
+
+	public function beforeFilter() {
+		$this->Auth->allow('index', 'view');
+		$this->set('loggedIn', $this->Auth->loggedIn());
+	}
+
+	public function isAuthorized($user) {
+    // Admin can access every action
+		if (isset($user['role']) && $user['role'] === 'admin') {
+			return true;
+		}
+		else
+		{
+			return false;
+		}		
+	}
 }

@@ -1,3 +1,12 @@
+<?php
+$uid = $this->Session->read('Auth.User.id');
+//echo $uid;
+$uname = $this->Session->read('Auth.User.username');
+//echo $uname;
+$urole = $this->Session->read('Auth.User.role');
+//echo $urole
+?>
+
 <div class="container" style="margin-top: 100px;">
 	<h3>Postagens</h3>
 	<br>
@@ -11,7 +20,14 @@
 					<th scope="col">Criado em</th>
 					<th scope="col">Modificado em</th>
 					<th scope="col">Criado por</th>
-					<th scope="col">Ações</th>
+					<?php
+					if ($loggedIn) {?>
+						<th scope="col">Ações</th>
+
+						<?php
+					}
+					?>
+					
 				</tr>
 			</thead>
 			<tbody class="text-center">
@@ -26,31 +42,39 @@
 									'action'=>'view', 
 									$post['Post']['id'])
 								); ?>	
-						</td>
-						<td><?= $post['Post']['created']; ?></td>
-						<td><?= $post['Post']['modified'] ?></td>
-						<td><?= $post['Post']['user_id'] ?></td>
-						<td>
-							<?php
-							echo $this->Form->postLink(
-								'Deletar',
-								array('action'=>'delete',$post['Post']['id']),
-								array('class'=>'btn btn-danger btn-sm','controller'=>'posts'),
-								__('Tem certeza?')
-							);
-							?>
-							<span>&nbsp</span>
-							<?php
-							echo $this->Html->link(
-								'Editar', 
-								array('action'=>'edit', $post['Post']['id']), 
-								array('class'=>'btn btn-primary btn-sm'));
-							?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-				<?php unset($post); ?>
-			</tbody>
-		</table>
-	</div>
-</div>
+							</td>
+							<td><?= $post['Post']['created']; ?></td>
+							<td><?= $post['Post']['modified'] ?></td>
+							<td><?= $post['Post']['user_id'] ?></td>
+							<?php if ($loggedIn) {?>
+								<td>
+									<?php
+									if ($uid === $post['Post']['user_id']) {
+									# code...
+
+										echo $this->Form->postLink(
+											'Deletar',
+											array('action'=>'delete',$post['Post']['id']),
+											array('class'=>'btn btn-danger btn-sm','controller'=>'posts'),
+											__('Tem certeza?')
+										);
+									}
+									?>
+									<span>&nbsp</span>
+									<?php
+									if ($uid === $post['Post']['user_id']) {
+									# code...
+										echo $this->Html->link(
+											'Editar', 
+											array('action'=>'edit', $post['Post']['id']), 
+											array('class'=>'btn btn-primary btn-sm'));}
+											?>
+										</td>
+									<?php } ?>
+								</tr>
+							<?php endforeach; ?>
+							<?php unset($post); ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
